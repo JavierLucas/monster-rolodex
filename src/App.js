@@ -31,7 +31,8 @@ class App extends Component{
     super();
     this.state = {
       monsters: [],
-      searchField: ''
+      searchField: '',
+      searchMode: 2
     }
   }
 
@@ -44,8 +45,18 @@ class App extends Component{
 
   render(){
     const { monsters, searchField } = this.state; //monsters = this.state.monsters, just a quicker way
-    const filteredMonster = monsters.filter(monster => 
-      monster.name.toLowerCase().includes(searchField.toLocaleLowerCase()))
+    var filteredMonster = [];
+    if(this.state.searchMode === 0){
+      filteredMonster = monsters.filter(monster => 
+      monster.name.toLowerCase().includes(searchField.toLocaleLowerCase()));
+    }
+    else if(this.state.searchMode === 1){
+        filteredMonster = monsters.filter(monster => 
+        monster.name.toLowerCase().startsWith(searchField.toLocaleLowerCase()));
+    }
+    else{
+        filteredMonster = monsters;
+    }
     return (
       <div className="App">
         <input 
@@ -54,11 +65,19 @@ class App extends Component{
             onChange={e => this.setState({searchField: e.target.value})}
             
         />
+
+
+        <input type='radio' name='options' id='1' onClick={e => this.setState({searchMode: 1})}></input>
+        <label for='1'>Starts With</label>
+        <input type='radio' name='options' id='2' onClick={e => this.setState({searchMode: 0})}></input>
+        <label for='2'>Contains</label>
+
               
               
         <CardList monsters = {filteredMonster}>          
             
         </CardList>
+        <h1>{this.state.searchMode}</h1>
            
       </div> 
     );
