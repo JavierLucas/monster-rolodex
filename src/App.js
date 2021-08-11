@@ -1,6 +1,8 @@
 import React,{Component} from 'react'
 
 import { CardList } from './components/card-list/card-list.component'
+import { SearchBox } from './components/search-box/search-box.component';
+
 
 import './App.css';
 
@@ -32,8 +34,11 @@ class App extends Component{
     this.state = {
       monsters: [],
       searchField: '',
-      searchMode: 2
+      searchMode: 0
     }
+
+    // Necessary if we do not use arrow function
+    //this.handleChange = this.handleChange.bind(this)
   }
 
   componentDidMount(){
@@ -41,6 +46,14 @@ class App extends Component{
       .then(response => 
         response.json())
       .then(users => this.setState({monsters: users}))
+  }
+
+  // handleChange(e){
+  //   this.setState({searchField: e.target.value})
+  // }
+
+  handleChange = e =>{
+    this.setState({searchField: e.target.value})
   }
 
   render(){
@@ -59,24 +72,31 @@ class App extends Component{
     }
     return (
       <div className="App">
-        <input 
+        <h1> Monsters Rolodex</h1>
+        {/* <input 
             type='search' 
             placeholder='search monsters' 
             onChange={e => this.setState({searchField: e.target.value})}
             
+        /> */}
+        <SearchBox
+            placeholder='search monsters' 
+            //handleChange={e => this.setState({searchField: e.target.value})}
+            handleChange={this.handleChange}
         />
+
+        
 
 
         <input type='radio' name='options' id='1' onClick={e => this.setState({searchMode: 1})}></input>
         <label for='1'>Starts With</label>
-        <input type='radio' name='options' id='2' onClick={e => this.setState({searchMode: 0})}></input>
+        <input type='radio' name='options' id='2' onClick={e => this.setState({searchMode: 0})} defaultChecked></input>
         <label for='2'>Contains</label>
 
               
               
-        <CardList monsters = {filteredMonster}>          
+        <CardList monsters = {filteredMonster}/>          
             
-        </CardList>
         <h1>{this.state.searchMode}</h1>
            
       </div> 
